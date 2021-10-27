@@ -1,5 +1,5 @@
-const { createApp } = require("./app");
-const http = require("http");
+import { createApp } from "./app";
+import http from "http";
 
 const app = createApp();
 const port = process.env.PORT || 3000;
@@ -12,7 +12,7 @@ server
     console.info(`Server listening on port ${port}`);
     app.emit("appStarted");
   })
-  .on("error", (error) => {
+  .on("error", (error: Error) => {
     // eslint-disable-next-line no-console
     console.error(`Unable to start server because of ${error.message}`);
   });
