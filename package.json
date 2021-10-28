@@ -8,9 +8,7 @@
     "yarn": "1.22.10"
   },
   "scripts": {
-    "start": "yarn tsc && node dist/server.js",
-    "olddev": "nodemon src/server.js",
-    "dev:hmpo": "nodemon src/hmpo-app.ts",
+    "start": "yarn tsc && node dist/app.js",
     "lint": "eslint .",
     "test": "mocha",
     "build-ts": "tsc",
@@ -19,7 +17,7 @@
     "clean": "rm -rf dist node_modules logs.json",
     "dev": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run watch-node\"",
     "copy-assets": "mkdir -p dist && copyfiles -u 1 src/**/*.html dist/ src/locales/**/** dist/ && copyfiles -a static/* && copyfiles -u 3 src/assets/javascript/*.js dist/public/scripts",
-    "watch-node": "nodemon --inspect=0.0.0.0:9230 dist/hmpo-app.js",
+    "watch-node": "nodemon --inspect=0.0.0.0:9230 dist/app.js",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --watch src/assets/scss/application.scss dist/public/stylesheets/application.css"
   },

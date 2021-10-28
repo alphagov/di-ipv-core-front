@@ -1,12 +1,12 @@
+import * as express from "express";
+
 import HmpoFormWizard from "hmpo-form-wizard";
-import { setup } from "hmpo-app";
+
 import { Steps } from "hmpo-form-wizard";
-const { router } = setup({
-  config: { APP_ROOT: __dirname },
-  urls: {
-    public: "/public",
-  },
-});
+import { Application } from "express-serve-static-core";
+import { IRouter } from "express";
+
+const router = express.Router();
 
 const steps: Steps = {
   "/": {
@@ -24,8 +24,10 @@ const fields = {
   },
 };
 
-const wizard = new HmpoFormWizard(steps, fields, {
+const wizard: any = new HmpoFormWizard(steps, fields, {
   name: "example-form-name",
 });
 
 router.use("/", wizard);
+
+export default router;

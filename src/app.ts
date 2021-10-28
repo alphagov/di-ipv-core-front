@@ -1,13 +1,21 @@
-import express, { Request, Response } from "express";
+import { setup } from "hmpo-app";
+import { Request, Response } from "express";
 
-const createApp = () => {
-  const app = express();
+import passport from "./app/passport";
 
-  app.get("/", (req: Request, res: Response) => {
-    // res.render("index");
-  });
+const { router } = setup({
+  config: { APP_ROOT: __dirname },
+  urls: {
+    public: "/public",
+  },
+});
 
-  return app;
-};
+router.use("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
 
-export { createApp };
+router.use("/passport", passport);
+
+// name
+// address
+// kbv
