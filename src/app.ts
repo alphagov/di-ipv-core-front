@@ -4,7 +4,7 @@ const createApp = () => {
   const app = express();
 
   app.get("/", (req: Request, res: Response) => {
-    res.send("Hello World!");
+    // res.render("index");
   });
 
   return app;

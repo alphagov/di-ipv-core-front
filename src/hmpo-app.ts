@@ -1,7 +1,12 @@
 import HmpoFormWizard from "hmpo-form-wizard";
 import { setup } from "hmpo-app";
 import { Steps } from "hmpo-form-wizard";
-const { router } = setup({ config: { APP_ROOT: __dirname } });
+const { router } = setup({
+  config: { APP_ROOT: __dirname },
+  urls: {
+    public: "/public",
+  },
+});
 
 const steps: Steps = {
   "/": {

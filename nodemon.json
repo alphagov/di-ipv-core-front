@@ -1,6 +1,9 @@
 {
   "watch": ["src"],
-  "ext": "ts,json",
+  "ext": "ts,js,json,html,css,scss",
   "ignore": ["src/**/*.test.js"],
-  "exec": "ts-node"
+  "verbose": true,
+  "events": {
+    "restart": "yarn run copy-assets"
+  }
 }
