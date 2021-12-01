@@ -1,3 +1,4 @@
+const { expect } = require("chai");
 const proxyquire = require("proxyquire");
 
 describe("credential issuer middleware", () => {
@@ -130,4 +131,35 @@ describe("credential issuer middleware", () => {
       expect(res.redirect).to.have.been.calledWith("/debug/");
     });
   });
+
+
+  describe('sendParamsToAPI', function() {
+    let req;
+    let res;
+    let next;
+    let configStub;
+    let axiosResponse;
+    let axiosStub = {};
+
+    beforeEach(() => {
+      res = {
+        status: sinon.fake(),
+        credentialIssuer: { code: "code-issued"}
+      };
+      configStub = {};
+      next = sinon.fake();
+    });
+    it.only('should send code to backend successfully', function() {
+      const middleware = proxyquire("./middleware", {
+        "../../lib/config": configStub,
+        axios: axiosStub,
+      });
+      axiosStub.post = sinon.fake.returns(axiosResponse);
+
+      middleware.sendParamsToAPI(res, req , next);
+      expect(res.status).to.be.eql(200);
+    });
+
+  });
+
 });
