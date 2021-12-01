@@ -38,12 +38,11 @@ module.exports = {
     next();
   },
 
-  sendParamsToAPI: async(req, res, next) => {
+  sendParamsToAPI: async (req, res, next) => {
     const requestEvidentParam = new URLSearchParams();
-    requestEvidentParam
-      .append("authorization_code", res.credentialIssuer.code)
-      .append("credential_issuer_id", CREDENTIAL_ISSUER_ID)
-      .append("redirect_uri", "http://localhost:3000");
+    requestEvidentParam.append("authorization_code", req.credentialIssuer.code);
+    requestEvidentParam.append("credential_issuer_id", CREDENTIAL_ISSUER_ID);
+    requestEvidentParam.append("redirect_uri", "http://localhost:3000");
 
     const config = {
       headers: {
@@ -51,12 +50,14 @@ module.exports = {
       },
     };
     try {
-      const resp = await axios.post(
+      await axios.post(
         `${API_BASE_URL}${API_REQUEST_EVIDENCE_PATH}`,
         requestEvidentParam,
         config
       );
-      if (resp.statusCode == 200) res.success = true
+
+      res.success = true;
+
       next();
     } catch (error) {
       next(error);

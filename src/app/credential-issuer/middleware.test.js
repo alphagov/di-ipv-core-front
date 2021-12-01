@@ -43,7 +43,7 @@ describe("credential issuer middleware", () => {
 
     it("should successfully return expected redirect url", async function () {
       configStub.CREDENTIAL_ISSUER_BASE_URL = "http://example.com";
-      configStub.PORT = 2200
+      configStub.PORT = 2200;
       const { buildCredentialIssuerRedirectURL } = proxyquire("./middleware", {
         "../../lib/config": configStub,
       });
@@ -61,9 +61,12 @@ describe("credential issuer middleware", () => {
       });
 
       it("should send 500 error", async () => {
-        const { buildCredentialIssuerRedirectURL } = proxyquire("./middleware", {
-          "../../lib/config": configStub,
-        });
+        const { buildCredentialIssuerRedirectURL } = proxyquire(
+          "./middleware",
+          {
+            "../../lib/config": configStub,
+          }
+        );
 
         await buildCredentialIssuerRedirectURL(req, res);
 
@@ -132,8 +135,7 @@ describe("credential issuer middleware", () => {
     });
   });
 
-
-  describe('sendParamsToAPI', function() {
+  describe("sendParamsToAPI", function () {
     let req;
     let res;
     let next;
@@ -142,24 +144,24 @@ describe("credential issuer middleware", () => {
     let axiosStub = {};
 
     beforeEach(() => {
+      req = {
+        credentialIssuer: { code: "code-issued" },
+      };
       res = {
         status: sinon.fake(),
-        credentialIssuer: { code: "code-issued"}
       };
       configStub = {};
       next = sinon.fake();
     });
-    it.only('should send code to backend successfully', function() {
+    it.only("should send code to backend successfully", function () {
       const middleware = proxyquire("./middleware", {
         "../../lib/config": configStub,
         axios: axiosStub,
       });
       axiosStub.post = sinon.fake.returns(axiosResponse);
 
-      middleware.sendParamsToAPI(res, req , next);
+      middleware.sendParamsToAPI(req, res, next);
       expect(res.status).to.be.eql(200);
     });
-
   });
-
 });
