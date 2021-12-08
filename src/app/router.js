@@ -29,8 +29,8 @@ router.get("/authorize", async (req, res) => {
       headers: { "ipv-session-id": req.session.ipvSessionId },
     });
 
-    const code = apiResponse.data.code.value;
-    const state = apiResponse.data.state.value || "";
+    const code = apiResponse.data.code?.value;
+    const state = apiResponse.data.state || "";
     const redirectURL = `${req.session.authParams.redirect_uri}?state=${state}&code=${code}`;
     res.redirect(redirectURL);
   } catch (e) {
