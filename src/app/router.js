@@ -26,9 +26,10 @@ router.get("/authorize", async (req, res) => {
         response_type: req.session.authParams.response_type,
         scope: "openid",
       },
+      headers: { "ipv-session-id": req.session.ipvSessionId },
     });
 
-    const redirectURL = `${apiResponse.data.redirectionURI}?state=${apiResponse.data.state}&authorizationCode=${apiResponse.data.authorizationCode.value}`;
+    const redirectURL = `${req.session.authParams.redirect_uri}?state=${apiResponse.data.state}&authorizationCode=${apiResponse.data.code.value}`;
     res.redirect(redirectURL);
   } catch (e) {
     // eslint-disable-next-line no-console
