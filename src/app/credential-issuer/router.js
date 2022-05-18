@@ -5,7 +5,8 @@ const router = express.Router();
 const {
   addCallbackParamsToRequest,
   sendParamsToAPI,
-  tryHandleRedirectError
+  tryHandleRedirectError,
+  validateVerifiableCredentialReceived
 } = require("./middleware");
 
 const { buildCredentialIssuerRedirectURL, redirectToAuthorize } = require('../shared/criHelper');
@@ -16,7 +17,8 @@ router.get(
   "/callback",
   tryHandleRedirectError,
   addCallbackParamsToRequest,
-  sendParamsToAPI
+  sendParamsToAPI,
+  validateVerifiableCredentialReceived
 );
 
 module.exports = router;

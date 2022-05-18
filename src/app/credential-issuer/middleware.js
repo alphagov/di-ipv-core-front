@@ -2,6 +2,7 @@ const axios = require("axios");
 const {
   API_BASE_URL,
   API_CRI_RETURN_PATH,
+  API_VALIDATE_VC_PATH,
   EXTERNAL_WEBSITE_HOST,
 } = require("../../lib/config");
 const { generateAxiosConfig } = require("../shared/axiosHelper");
@@ -25,14 +26,15 @@ module.exports = {
 
 
     try {
-      const apiResponse = await axios.post(
+      await axios.post(
         `${API_BASE_URL}${API_CRI_RETURN_PATH}`,
         evidenceParam,
         generateAxiosConfig(req.session.ipvSessionId)
       );
-      res.status = apiResponse?.status;
-
-      res.redirect(`/ipv${apiResponse.data?.journey}`);
+      // res.status = apiResponse?.status;
+      //
+      // res.redirect(`/ipv${apiResponse.data?.journey}`);
+      return next()
     } catch (error) {
       if (error?.response?.status === 404) {
         res.status = error.response.status;
@@ -62,4 +64,24 @@ module.exports = {
      return next(error)
     }
   },
+  validateVerifiableCredentialReceived : async (req, res, next) => {
+    try {
+      const validationResponse = await axios.post(
+        `${API_BASE_URL}${API_VALIDATE_VC_PATH}`,
+        new URLSearchParams([
+          ["criId", req.query.id]
+        ]),
+        generateAxiosConfig(req.session.ipvSessionId)
+      );
+
+      res.redirect(`/ipv${validationResponse.data?.journey}`);
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        res.status = error.response.status;
+      } else {
+        res.error = error.name;
+      }
+      next(error);
+    }
+  }
  };

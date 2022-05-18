@@ -65,7 +65,7 @@ module.exports = {
       const allowedActions = ['/journey/next', '/journey/cri/start/ukPassport', '/journey/cri/start/fraud', '/journey/cri/start/address', '/journey/cri/start/kbv', '/journey/cri/start/activityHistory', '/journey/cri/start/debugAddress', '/journey/session/end']
       const validAction = allowedActions.find(x => x === req.url)
 
-      if(validAction) {
+      if (validAction) {
         await handleJourneyResponse(req, res, validAction);
       } else {
         next(new Error(`Action ${req.url} not valid`));
