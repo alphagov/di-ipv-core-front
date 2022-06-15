@@ -21,26 +21,28 @@ const loggerConfig = {
   app: false,
 };
 
+const dynamoDBSessionStore = new DynamoDBStore({
+  client: dynamodb,
+  table: 'session'
+});
+
+const sessionConfig = {
+  cookieName: "ipv_core_service_session",
+  secret: 'SESSION_SECRET',
+  sessionStore: dynamoDBSessionStore,
+};
+
 const { router, app } = setup({
   config: { APP_ROOT: __dirname },
   port: PORT,
   logs: loggerConfig,
-  session: false,
+  session: sessionConfig,
   redis: false,
   urls: {
     public: "/public",
   },
   publicDirs: ["../dist/public"],
   dev: true,
-  customSession: (app) => {app.use(session({
-    secret: 'abc123',
-    resave: false,
-    saveUninitialized: false,
-    store: new DynamoDBStore({
-      client: dynamodb,
-      table: 'session'
-    })
-  }))}
 });
 
 
