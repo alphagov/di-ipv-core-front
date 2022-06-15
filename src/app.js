@@ -5,7 +5,6 @@ const DynamoDBStore = require('connect-dynamodb')(session)
 
 require("express-async-errors");
 
-const app = express()
 
 AWS.config.update({
   region: 'eu-west-2',
@@ -13,7 +12,7 @@ AWS.config.update({
 })
 const dynamodb = new AWS.DynamoDB()
 
-const { PORT } = require("./lib/config");
+const { PORT, SESSION_SECRET } = require("./lib/config");
 const { setup } = require("hmpo-app");
 
 const loggerConfig = {
@@ -22,8 +21,7 @@ const loggerConfig = {
   app: false,
 };
 
-
-const { router } = setup({
+const { router, app } = setup({
   config: { APP_ROOT: __dirname },
   port: PORT,
   logs: loggerConfig,
@@ -34,17 +32,18 @@ const { router } = setup({
   },
   publicDirs: ["../dist/public"],
   dev: true,
+  customSession: (app) => {app.use(session({
+    secret: 'abc123',
+    resave: false,
+    saveUninitialized: false,
+    store: new DynamoDBStore({
+      client: dynamodb,
+      table: 'session'
+    })
+  }))}
 });
 
-app.use(session({
-  secret: 'my-secret',
-  resave: false,
-  saveUninitialized: false,
-  store: new DynamoDBStore({
-    client: dynamodb,
-    table: 'session'
-  })
-}));
+
 
 app.use((req, res, next) => {
   if (!req.session.views) {
@@ -53,7 +52,10 @@ app.use((req, res, next) => {
   next()
 });
 
-app.get('/private', (req, res) => {
+router.get('/private', (req, res) => {
+  if (!req.session.views) {
+    req.session.views = 0
+  }
   const numberOfViews = ++req.session.views
   res.send(`The /private page has been visited ${ numberOfViews } times.`)
 });
