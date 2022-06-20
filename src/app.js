@@ -13,6 +13,9 @@ const loggerConfig = {
 const sessionConfig = {
   cookieName: "ipv_core_service_session",
   secret: SESSION_SECRET,
+  cookieOptions: {
+    secure: true
+  }
 };
 
 const { router } = setup({
