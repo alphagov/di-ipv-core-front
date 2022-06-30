@@ -75,7 +75,7 @@ function check_connection() {
 }
 
 function init() {
-  region=$(aws configure get region)
+  region='eu-west-2'
   account_id=$(aws sts get-caller-identity --query Account --output text)
   STACK_NAME="core-front-${ENVIRONMENT}"
   DEV_IMAGE_TAG="${ENVIRONMENT}-$(date +%s)"
